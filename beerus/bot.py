@@ -2,8 +2,6 @@
 from __future__ import annotations
 
 import asyncio
-import hashlib
-import json
 import logging
 import time
 from pathlib import Path
@@ -151,20 +149,12 @@ class Beerus(commands.Bot):
         self.maintenance.start()
 
     async def _sync_commands(self) -> None:
-        def _dict(c):
-            try:
-                return c.to_dict(self.tree)
-            except TypeError:                      # older discord.py
-                return c.to_dict()
-        payload = json.dumps([_dict(c) for c in self.tree.get_commands()], sort_keys=True, default=str)
-        digest = hashlib.sha1(payload.encode()).hexdigest()
-        if await self.db.get_setting("cmd_hash") != digest:
-            try:
-                await self.tree.sync()
-                await self.db.set_setting("cmd_hash", digest)
-                log.info("Slash commands synced.")
-            except discord.HTTPException as exc:
-                log.warning("Command sync failed: %s", exc)
+        try:
+            synced = await self.tree.sync()
+        except discord.HTTPException:
+            log.exception("Slash command sync failed; aborting startup.")
+            raise
+        log.info("Slash commands synced: %s", ", ".join(command.name for command in synced) or "(none)")
 
     async def on_ready(self) -> None:
         log.info("Beerus-Sama is awake as %s (guilds: %d) — AI: %s",
