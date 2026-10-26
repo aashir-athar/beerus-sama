@@ -1,0 +1,117 @@
+# ══════════════════════════════════════════════════════════════
+#  Beerus-Sama — rules & settings
+#  Edit here, or live from Discord with /beerus config set
+#  (Discord overrides are saved in the database and win over this file)
+# ══════════════════════════════════════════════════════════════
+
+channels:
+  welcome: 1561011103553822882
+  logs: 1564104881827221534
+  rules: 0            # optional: rules channel ID, shown in welcome embed (0 = off)
+
+exempt:
+  channel_ids: []     # channels the bot ignores completely
+  role_ids: []        # roles the bot never warns (e.g. mods)
+  administrators: false
+  mod_role_ids: []    # pinged in logs when a user keeps offending / on raid alerts
+
+# ── Core behaviour ───────────────────────────────────────────
+moderation:
+  warn_only: true                 # HARD RULE. No kick / mute / timeout / ban — ever.
+  delete_offending_messages: false
+  warn_threshold: 55              # toxicity score (0-100) that triggers a warning
+  ai_review_range: [25, 55]       # gray zone: ask Groq for context-aware second opinion
+  ai_review_enabled: true
+  local_fallback_threshold: 45    # if Groq is down/out of budget, gray-zone messages at/above this still warn
+  warning_expiry_days: 30         # warnings older than this stop counting for mood
+  warn_cooldown_seconds: 20       # max one warning per user per this many seconds
+  display_warning_slots: 5        # progress bar size in the warning reply
+  escalate_to_mods_at: 5          # at this many active warnings, mods are told in logs
+  banter:
+    enabled: true
+    dampen: 0.4                   # score multiplier when friendly banter is detected
+    dampen_hard_words: false      # true = even hard words are forgiven in banter
+  fight:
+    window_seconds: 90
+    min_users: 2
+    min_heated_messages: 4        # total heated messages in window
+    heated_score: 30
+    notice_cooldown_seconds: 120
+
+# ── Spam rules ───────────────────────────────────────────────
+spam:
+  duplicate:
+    window_seconds: 60
+    max_repeats: 3
+    cross_user_min_users: 3       # same text from N different users = raid-style spam
+  flood:
+    window_seconds: 8
+    max_messages: 6
+  emoji:
+    max_per_message: 10
+  mentions:
+    max_per_message: 4
+  caps:
+    min_letters: 12
+    max_ratio: 0.7
+  links:
+    max_per_message: 3
+    window_seconds: 60
+    max_in_window: 5
+    allowed_domains:
+      - tenor.com
+      - giphy.com
+      - youtube.com
+      - youtu.be
+      - discord.com
+      - discord.gg   # real discord.gg invites are still checked by the invite rule
+      - github.com
+      - wikipedia.org
+      - spotify.com
+      - open.spotify.com
+  invites:
+    allowed_codes: []             # invite codes that are OK, e.g. ["myServer"]
+
+# ── Raid / join rules ────────────────────────────────────────
+raid:
+  join_window_seconds: 60
+  join_threshold: 6               # this many joins inside the window = alert
+  alert_cooldown_seconds: 300
+  new_account_days: 7
+  rapid_rejoin_seconds: 600
+
+# ── Groq AI (free tier: 30 req/min, ~1000 req/day, ~200k tokens/day) ──
+ai:
+  enabled: true
+  timeout_seconds: 20
+  extra_params: { reasoning_effort: "none" }   # auto-dropped if the model rejects it
+  global_rpm: 20                  # stay under the free 30 RPM
+  daily_request_cap: 900          # free plan is 1000/day
+  daily_token_budget: 170000      # free plan is 200k/day
+  classifier_share: 0.5           # classifier may use at most this share of the daily budget
+  chat:
+    user_cooldown_seconds: 25
+    max_chars: 170                # hard one-liner limit
+    max_words: 24
+    max_input_chars: 300
+    max_tokens: 90
+    temperature: 0.9
+  classifier:
+    max_tokens: 90
+    context_messages: 5
+    min_confidence: 0.7
+
+# ── Backup ───────────────────────────────────────────────────
+backup:
+  enabled: true
+  interval_hours: 6
+  keep_local: 5
+  upload_to_discord: true         # sends the .db into the logs channel; auto-restored on start
+
+# ── Server activity logs ─────────────────────────────────────
+logging:
+  join_leave: true
+  message_delete: true
+  message_edit: true
+  channels: true
+  max_excerpt_chars: 180

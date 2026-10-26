@@ -1,0 +1,64 @@
+name: Beerus-Sama (24/7)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"      # safety net: restarts the bot if the chain ever breaks
+
+# Only ONE run at a time. A new run waits (queued) until the old one finishes → no overlap, ~no gap.
+concurrency:
+  group: beerus-bot
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: write              # lets a run queue its own successor
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355      # GitHub hard limit is 360
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Safety checks (warn-only rule + detection self-test)
+        run: |
+          python scripts/check_no_punishments.py
+          python tests/check_detection.py
+
+      - name: Restore database (if any)
+        uses: actions/cache/restore@v4
+        with:
+          path: data
+          key: beerus-data-${{ github.run_id }}
+          restore-keys: beerus-data-
+
+      - name: Queue the next run (so the bot never stays offline)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run bot.yml --ref "${{ github.ref_name }}" || echo "could not queue next run (cron will cover it)"
+
+      - name: Run Beerus-Sama
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_MODEL: ${{ vars.GROQ_MODEL || 'qwen/qwen3.8-27b' }}
+        run: |
+          code=0
+          timeout -k 120 -s TERM 5h40m python main.py || code=$?
+          # 124 = normal scheduled stop (bot already backed up & shut down cleanly)
+          if [ "$code" -ne 0 ] && [ "$code" -ne 124 ]; then exit "$code"; fi
+
+      - name: Save database
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: data
+          key: beerus-data-${{ github.run_id }}

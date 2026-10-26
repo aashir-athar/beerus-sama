@@ -1,0 +1,603 @@
+# ══════════════════════════════════════════════════════════════
+#  Lexicon — add / remove words freely. Lowercase, Roman script.
+#  Spelling variants don't all need listing: repeated letters, leetspeak
+#  (m@dar, ch0d), spaced letters (b h e n), censoring (b*hen) and
+#  1-letter typos on long hard words are handled automatically.
+#
+#  hard      → always abusive                              (weight 65)
+#  strong    → abusive when aimed at someone               (weight 40)
+#  soft      → mild insult, only counts when aimed at someone (weight 20)
+#  ambiguous → has innocent meanings too, only when aimed  (weight 15)
+# ══════════════════════════════════════════════════════════════
+
+hard:
+  # Roman Urdu / Hindi / Punjabi
+  - madarchod
+  - maderchod
+  - madrchod
+  - bhenchod
+  - behenchod
+  - behnchod
+  - bahenchod
+  - bhainchod
+  - benchod
+  - bhnchod
+  - pencho
+  - penchod
+  - bhosdike
+  - bhosdika
+  - bhosdi
+  - bhosda
+  - bhosri
+  - bhosre
+  - chutiya
+  - chutia
+  - chutiye
+  - chootiya
+  - chutya
+  - chutiyapa
+  - chutmarike
+  - chut
+  - choot
+  - gandu
+  - gaandu
+  - gand maar
+  - gaand
+  - lund
+  - lauda
+  - lawda
+  - lavda
+  - loda
+  - lodu
+  - lode
+  - randi
+  - raand
+  - randwa
+  - bhadwa
+  - bhadwe
+  - bhadva
+  - kanjar
+  - kanjri
+  - kanjra
+  - gashti
+  - phudi
+  - phuddi
+  - fuddi
+  - lun
+  - harami
+  - haramzada
+  - haramzadi
+  - haramzade
+  - haramkhor
+  - haraami
+  - dalla
+  # English
+  - fuck
+  - fucking
+  - fucker
+  - fucked
+  - fuckin
+  - fuk
+  - fck
+  - fuq
+  - motherfucker
+  - bitch
+  - bitches
+  - asshole
+  - arsehole
+  - cunt
+  - whore
+  - slut
+  - slutty
+  - dickhead
+  - cocksucker
+  - blowjob
+  - jerkoff
+  - wanker
+  - twat
+
+strong:
+  - bastard
+  - stfu
+  - gtfo
+  - bullshit
+  - mofo
+  - kutta
+  - kutte
+  - kutti
+  - kuttiya
+  - kuttey
+  - kutteya
+  - kamina
+  - kamine
+  - kameena
+  - kamini
+  - suar
+  - sooar
+  - suwar
+  - bakchod
+  - tharki
+  - chapri
+  - nalayak
+  - nikamma
+  - nikamme
+  - ghatiya
+  - besharam
+  - behaya
+  - behaiya
+  - beghairat
+  - bayghairat
+  - kamzarf
+  - lanati
+  - lanat
+  - shit
+  - shitty
+  - dumbass
+  - jackass
+  - dipshit
+  - scumbag
+  - douchebag
+  - douche
+  - pig
+  - trash
+  - garbage
+  - hijra
+  - hijda
+  - chakka
+  - mc
+  - bc
+  - bkl
+  - bsdk
+  - mkc
+
+soft:
+  - bewakoof
+  - bevakoof
+  - bewaqoof
+  - bewakuf
+  - pagal
+  - ullu
+  - ulloo
+  - gadha
+  - gadhe
+  - khota
+  - khotey
+  - jahil
+  - jaahil
+  - bekar
+  - bakwas
+  - bakwaas
+  - chomu
+  - lafanga
+  - ahmaq
+  - behuda
+  - idiot
+  - stupid
+  - moron
+  - loser
+  - dumb
+  - useless
+  - pathetic
+  - fraud
+  - clown
+  - tatti
+  - ugly
+  - noob
+  - bhikari
+  - darpok
+  - bhains
+  - mota
+  - motu
+  - moti
+
+ambiguous:
+  - dalal
+  - gand
+  - dick
+  - cock
+  - pussy
+  - ass
+  - wtf
+  - lan
+  - sala
+  - saala
+  - saale
+  - sale
+  - gandi
+  - ganday
+  - gande
+  - freak
+  - psycho
+  - bitchy
+
+# Slurs / hate / racism / caste / sectarian  (weight 85, never dampened)
+slurs:
+  - nigger
+  - nigga
+  - niggah
+  - faggot
+  - fagot
+  - tranny
+  - retard
+  - retarded
+  - kike
+  - spic
+  - chink
+  - chinki
+  - paki
+  - kalu
+  - kallu
+  - kaalu
+  - kalia
+  - habshi
+  - bhangi
+  - chuhra
+  - chura
+  - chamar
+  - katua
+  - katwa
+  - mulle
+  - mullo
+  - nijis
+  - najis
+  - dehshatgard
+
+# Religion/sect words used as insults when aimed at someone (weight 60)
+hate_terms:
+  - kafir
+  - kaafir
+  - qadiani
+  - mirzai
+  - rafzi
+  - nasibi
+
+# Group words; "<group> + insult within 3 words" = hate speech
+groups:
+  - hindu
+  - hindus
+  - muslim
+  - muslims
+  - sikh
+  - sikhs
+  - christian
+  - christians
+  - isai
+  - shia
+  - shias
+  - sunni
+  - sunnis
+  - ahmadi
+  - ahmadis
+  - pathan
+  - pathans
+  - punjabi
+  - punjabis
+  - sindhi
+  - sindhis
+  - baloch
+  - mohajir
+  - mohajirs
+  - bengali
+  - dalit
+  - dalits
+  - jews
+  - arabs
+  - blacks
+  - indians
+  - pakistanis
+  - afghans
+  - afghani
+  - chinese
+
+group_insults:
+  - gande
+  - gandey
+  - kutte
+  - kuttey
+  - saale
+  - terrorist
+  - terrorists
+  - dehshatgard
+  - dehshatgardon
+  - trash
+  - filthy
+  - dirty
+  - animals
+  - cockroaches
+  - scum
+  - vermin
+  - haramzade
+  - nijis
+  - najis
+  - jahil
+  - jahilon
+  - dushman
+
+# Sexual / NSFW terms (weight 35 each; harassment when aimed at someone)
+sexual:
+  - sex
+  - sexy
+  - porn
+  - porno
+  - pornhub
+  - xxx
+  - nude
+  - nudes
+  - naked
+  - nangi
+  - nanga
+  - boobs
+  - boobies
+  - tits
+  - titties
+  - dickpic
+  - handjob
+  - horny
+  - chudai
+  - mms
+  - onlyfans
+  - nsfw
+  - hentai
+  - orgasm
+  - masturbate
+  - fap
+  - erotic
+  - sexting
+  - blowjobs
+  - anal
+
+# Words that make a family member insult ("m@ ki ...", "behen ki ...")
+family_words:
+  - maa
+  - ma
+  - mother
+  - ammi
+  - amma
+  - behen
+  - bhen
+  - behn
+  - bahen
+  - baap
+  - bap
+  - pyo
+  - walida
+  - sister
+
+# Regexes. Applied to the cleaned text. (?i) is implied.
+patterns:
+  threat:
+    - '\b(maar|mar|maarr)\s*(dal|daal)\w*'
+    - '\b(maar|mar)\s*d(unga|oonga|ungi|enge|ega|enga|ena|ene)\b'
+    - '\b(maar|mar)\s*(sut|sutt)\w*'
+    - '\b(jaan|jan)\s*se\s*(maar|mar)\w*'
+    - '\b(tujhe|tenu|tainu|tumhe|tuje|tujhko|tumko|usko|ohnu|ehnu|tuhanu)\s+(maar|mar|qatal|khatam|uda|kat|tod)\w*'
+    - '\b(goli|bandook|chaqu|chaku|talwar)\s*(maar|chala|laga|se)\w*'
+    - '\b(tang|taang|taangen|tangen|haddi|haddiyan|hadiyan|sir)\s*(tod|toor|phod)\w*'
+    - '\buth\s*wa\s*(lunga|loonga|lena|lenge)\b'
+    - '\b(qatal|khoon)\s*(kar|kardunga|kar\s*dunga)\w*'
+    - '\b(vadh|wadh)\s*d(ewaan|enda|unga)\b'
+    - '\b(kill|murder|shoot|stab|beat|hurt|destroy|rape|find)\s+(you|u|ur\s+\w+|your\s+\w+)\b'
+    - '\bi\s*(will|ll|am gonna|m gonna|gonna)\s+(kill|murder|shoot|stab|beat|find|hurt|rape)\b'
+    - '\bwatch\s+your\s+back\b'
+    - '\bi\s+know\s+where\s+you\s+live\b'
+  threat_soft:
+    - '\bdekh\s*(lunga|loonga|lena|lenge|lain?ga|laanga)\b'
+    - '\bmilna\s+(zara|bas)\b'
+    - '\bsamajh\s+kya\s+rakha\b'
+  bully:
+    - '\b(shakal|shakl|shakkal)\s*(dekh|te|ki|vekh)\b'
+    - '\b(aukat|aukaat|auqaat)\b'
+    - '\bno\s*(one|body)\s+(likes|loves|cares\s+about)\s+(you|u)\b'
+    - '\b(koi|kise)\s+(tujhe|tumhe|tenu)\s+pasand\s+nahi'
+    - '\b(fat|ugly)\s+(pig|cow|face|loser)\b'
+  bully_severe:
+    - '\bk\s*y\s*s\b'
+    - '\bkill\s*(your\s*self|urself|yourself)\b'
+    - '\bgo\s+die\b'
+    - '\b(mar|maar)\s*(ja|jao|jaa|jaye|jana)\b'
+    - '\b(doob|dub)\s*(mar|maro|ja)\b'
+    - '\bhang\s*(your\s*self|urself)\b'
+    - '\bsuicide\s+(kar|kro|karle|kar\s*le)\b'
+  bait:
+    - '\b(dum|himmat|jurrat)\s+hai\s+(to|toh|ta)\b'
+    - '\b(aa|aja|aaja|a\s*ja)\s+(ghar|bahar|saamne|samne|dekh)\b'
+    - '\bbol\s+ke\s+dikha\b'
+    - '\bkar\s+ke\s+dikha\b'
+    - '\bcome\s+at\s+me\b'
+    - '\bfight\s+me\b'
+    - '\bbring\s+it\b'
+    - '\bmard\s+ban\b'
+    - '\b(dar|darr)\s+gaya\b'
+    - '\bcry\s+more\b'
+    - '\btrigger(ed)?\s+(ho|hogaya|ho gaya)\b'
+    - '\bbhonk\w*\b'
+    - '\bbhaag\s+(ja|jao)\b'
+    - '\bdafa\s*ho\b'
+    - '\bjahann?um\s+(mein|me|ch)\s+ja\b'
+    - '\bteri\s+aisi\s+ki\s+taisi\b'
+    - '\bbhaar\s+ch\s+ja\b'
+  sexual_harass:
+    - '\bsend\s+(me\s+)?(nudes?|pics?|photos?|boobs)\b'
+    - '\b(nudes?|nangi|nanga)\s+(bhej|bhejo|dikha|dikhao|send)\b'
+    - '\bshow\s+(me\s+)?(ur|your)\s+(boobs|body|tits|pics|private)\b'
+    - '\b(sex|chat)\s+(karo|kro|karna|karogi|karoge|karega|karegi)\b'
+    - '\bsleep\s+with\s+me\b'
+    - '\braat\s+ko\s+(aa|aaja|aao|mil)\b'
+    - '\bhow\s+much\s+(for|per)\s+(night|hour)\b'
+    - '\b(rate|kitne\s+ka)\s+(kitna|kya)\s+hai\b'
+    - '\bdm\s+me\s+(pics|nudes|photos)\b'
+    - '\bmy\s+(room|bed)\s+(chal|aa|come)\b'
+  hate_generic:
+    - '\b(go\s+back\s+to\s+your\s+country)\b'
+    - '\b(sab|saray|saare|all)\s+(the\s+)?(hindu|muslim|sikh|christian|shia|sunni|ahmadi|pathan|punjabi|sindhi|baloch|mohajir|jews|arabs|blacks)s?\s+(are|hain|hoty|hote|han|ne|hotay)\b'
+    - '\byour\s+kind\b'
+  injection:   # prompt-injection attempts when talking to the bot
+    - 'ignore\s+(all\s+|any\s+)?(previous|prior|above|earlier)\s+(instructions?|prompts?|rules?)'
+    - 'disregard\s+(the\s+)?(above|previous|system)'
+    - 'forget\s+(everything|all|your)\s+(instructions?|rules?|prompt)'
+    - 'you\s+are\s+now\s+(?!beerus)'
+    - 'act\s+as\s+(?!beerus)'
+    - 'pretend\s+(to\s+be|you\s+are)'
+    - 'system\s*prompt'
+    - 'reveal\s+(your|the)\s+(instructions?|prompt|rules|key|token)'
+    - 'developer\s+mode'
+    - '\bjailbreak\b'
+    - '\bDAN\b'
+    - '(api|secret)[\s_-]*key'
+    - '\btoken\b.{0,20}\b(show|give|print|dikha|bata)'
+    - '(show|print|repeat)\s+(me\s+)?(your|the)\s+(prompt|instructions|rules)'
+    - '<\s*/?\s*(system|assistant|user)\s*>'
+    - '\[\s*(system|inst)\s*\]'
+
+# Marks banter / friendly tone
+banter_markers:
+  - lol
+  - lmao
+  - lmfao
+  - haha
+  - hahaha
+  - hehe
+  - xd
+  - jk
+  - mazak
+  - mazaak
+  - mazaaq
+  - joke
+  - yaar
+  - yar
+  - yrr
+  - bro
+  - bhai
+  - bhaijaan
+  - dost
+  - buddy
+  - 😂
+  - 🤣
+  - 😭
+  - 💀
+  - 😹
+  - 😆
+  - 😜
+  - 😝
+
+# Marks "talking ABOUT a word", asking meaning, telling someone not to swear, etc.
+meta_markers:
+  - matlab
+  - meaning
+  - lafz
+  - word
+  - gaali
+  - gali
+  - swear
+  - swearing
+  - mat bol
+  - mat bolo
+  - mat kaho
+  - mat do
+  - mat de
+  - na bol
+  - ni bolna
+  - nahi bolna
+  - dont say
+  - don't say
+  - stop saying
+  - not allowed
+  - galat hai
+  - bura hai
+  - language
+  - mind your
+  - watch your
+  - sorry
+  - maafi
+  - kehte hain
+  - keh raha
+  - bola tha
+  - said
+
+# Words that mean "aimed at you" (second person)
+second_person:
+  - tu
+  - tum
+  - tera
+  - tere
+  - teri
+  - tumhara
+  - tumhare
+  - tumhari
+  - tujhe
+  - tumhe
+  - tujhko
+  - tumko
+  - tenu
+  - tainu
+  - tuhanu
+  - tusi
+  - tuhada
+  - tuhadi
+  - you
+  - u
+  - ur
+  - your
+  - youre
+  - aap
+  - apka
+  - apki
+  - tujh
+  - tuj
+  - oye
+  - abe
+  - abey
+  - oi
+
+# Words that mean "about me"
+first_person:
+  - main
+  - mein
+  - mujhe
+  - mera
+  - meri
+  - mere
+  - mainu
+  - menu
+  - hum
+  - hamara
+  - i
+  - im
+  - me
+  - my
+  - myself
+
+# Cues that justify an AI second opinion even without a lexicon hit
+ai_cues:
+  - hate
+  - nafrat
+  - worst
+  - disgusting
+  - sucks
+  - shut
+  - bekar
+  - ghatiya
+  - zehar
+  - jaanwar
+  - janwar
+  - insaan
+  - bewaqoof
+  - nikal
+  - bhaag
+  - chup
+  - dafa
+  - go away
+  - get lost
+  - kamzor
+  - shame
+  - sharam
+  - sharm
+  - dhokha
+  - jhoota
+  - jhootha
+  - liar
+  - fake
+  - cheap
+  - low
+  - gutter
+  - gutiya
