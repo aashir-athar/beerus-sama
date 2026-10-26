@@ -129,6 +129,7 @@ class Beerus(commands.Bot):
         self.started_at = time.time()
         self.join_times: dict[int, list[float]] = {}
         self.last_raid_alert: dict[int, float] = {}
+        self._synced_guild_commands: set[int] = set()
         self._error_handler = DiscordErrorHandler(self)
         logging.getLogger().addHandler(self._error_handler)
 
@@ -157,6 +158,7 @@ class Beerus(commands.Bot):
         log.info("Slash commands synced: %s", ", ".join(command.name for command in synced) or "(none)")
 
     async def on_ready(self) -> None:
+        await self._sync_guild_commands()
         log.info("Beerus-Sama is awake as %s (guilds: %d) — AI: %s",
                  self.user, len(self.guilds), "on" if self.groq.configured else "off (no GROQ_API_KEY)")
         emb = discord.Embed(
@@ -165,6 +167,24 @@ class Beerus(commands.Bot):
                         f"AI `{'on' if self.groq.configured else 'off'}` · Model `{self.groq.model}`",
             color=persona.MOOD_COLOR["calm"], timestamp=utcnow())
         self.logs.put(embed=emb)
+
+    async def on_guild_join(self, guild: discord.Guild) -> None:
+        await self._sync_guild_commands(guild)
+
+    async def _sync_guild_commands(self, guild: discord.Guild | None = None) -> None:
+        guilds = [guild] if guild is not None else self.guilds
+        for target in guilds:
+            if target.id in self._synced_guild_commands:
+                continue
+            self.tree.copy_global_to(guild=target)
+            try:
+                synced = await self.tree.sync(guild=target)
+            except discord.HTTPException:
+                log.exception("Slash command sync failed for guild %s (%s).", target.name, target.id)
+                continue
+            self._synced_guild_commands.add(target.id)
+            log.info("Slash commands synced to guild %s (%s): %s",
+                     target.name, target.id, ", ".join(command.name for command in synced) or "(none)")
 
     async def on_resumed(self) -> None:
         log.info("Gateway session resumed.")
