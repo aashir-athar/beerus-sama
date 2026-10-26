@@ -52,7 +52,7 @@ jobs:
           GROQ_MODEL: ${{ vars.GROQ_MODEL || 'qwen/qwen3.8-27b' }}
         run: |
           code=0
-          timeout -k 120 -s TERM 5h40m python main.py || code=$?
+          timeout -k 120 -s TERM 340m python main.py || code=$?
           # 124 = normal scheduled stop (bot already backed up & shut down cleanly)
           if [ "$code" -ne 0 ] && [ "$code" -ne 124 ]; then exit "$code"; fi
 
