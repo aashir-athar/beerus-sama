@@ -60,6 +60,7 @@ class Admin(commands.Cog):
     @beerus.command(name="status", description="Bot health, AI budget and uptime")
     @admin_only()
     async def status(self, interaction: discord.Interaction) -> None:
+        await interaction.response.defer(ephemeral=True)
         b = self.bot
         emb = discord.Embed(title="🟣 Beerus-Sama status", color=persona.MOOD_COLOR["calm"], timestamp=utcnow())
         emb.add_field(name="Uptime", value=duration_text(time.time() - b.started_at))
@@ -72,12 +73,13 @@ class Admin(commands.Cog):
         last = await b.db.get_setting("last_backup_ts", 0)
         emb.add_field(name="Last backup", value=f"<t:{int(last)}:R>" if last else "never")
         emb.add_field(name="Rule", value="⚠️ Warn-only. No kick / mute / ban.", inline=False)
-        await interaction.response.send_message(embed=emb, ephemeral=True)
+        await interaction.followup.send(embed=emb, ephemeral=True)
 
     # ── warnings ──
     @beerus.command(name="warnings", description="Show a member's warning history")
     @admin_only()
     async def warnings(self, interaction: discord.Interaction, user: discord.Member) -> None:
+        await interaction.response.defer(ephemeral=True)
         rows = await self.bot.db.recent_warnings(interaction.guild_id, user.id, 10)
         active = await self.bot.db.active_warning_count(
             interaction.guild_id, user.id, float(self.bot.cfg.get("moderation.warning_expiry_days", 30)))
@@ -89,16 +91,17 @@ class Admin(commands.Cog):
             emb.add_field(name=f"{persona.CATEGORY_ICON.get(r['category'], '⚠️')} {trunc(r['reason'], 40)}",
                           value=f"<t:{int(r['created_at'])}:R> · score {r['score']} · {who}"
                                 + ("" if r["active"] else " · cleared"), inline=False)
-        await interaction.response.send_message(embed=emb, ephemeral=True)
+        await interaction.followup.send(embed=emb, ephemeral=True)
 
     @beerus.command(name="clearwarnings", description="Clear a member's active warnings")
     @admin_only()
     async def clearwarnings(self, interaction: discord.Interaction, user: discord.Member) -> None:
+        await interaction.response.defer(ephemeral=True)
         await self.bot.db.clear_warnings(interaction.guild_id, user.id)
         self.bot.logs.put(embed=discord.Embed(
             title="🧹 Warnings cleared", description=f"{user.mention} by {interaction.user.mention}",
             color=0x22C55E, timestamp=utcnow()))
-        await interaction.response.send_message(f"✅ {user.display_name} de warnings saaf kar ditte.", ephemeral=True)
+        await interaction.followup.send(f"✅ {user.display_name} de warnings saaf kar ditte.", ephemeral=True)
 
     @beerus.command(name="warn", description="Give a manual warning (Beerus-style)")
     @app_commands.describe(user="Who", reason="Why (shown in the warning)")
@@ -107,19 +110,21 @@ class Admin(commands.Cog):
         if user.bot:
             await interaction.response.send_message("Bots nu warning? Whis hasega. 😏", ephemeral=True)
             return
-        await interaction.response.send_message("✅ Warning ditti ja rahi ae.", ephemeral=True)
+        await interaction.response.defer(ephemeral=True)
         await self.bot.warnings.issue(
             member=user, channel=interaction.channel, target=None, category="toxicity", severity=1, score=0,
             source="moderator", issued_by=interaction.user.id, manual_reason=trunc(reason, 150))
+        await interaction.followup.send(f"✅ {user.display_name} nu warning ditti gayi.", ephemeral=True)
 
     @beerus.command(name="top", description="Members with the most active warnings")
     @admin_only()
     async def top(self, interaction: discord.Interaction) -> None:
+        await interaction.response.defer(ephemeral=True)
         rows = await self.bot.db.top_offenders(
             interaction.guild_id, float(self.bot.cfg.get("moderation.warning_expiry_days", 30)))
         text = "\n".join(f"**{i + 1}.** <@{r['user_id']}> — {r['c']}" for i, r in enumerate(rows)) or "Koi nahi. Sab changey bache ne! 😌"
-        await interaction.response.send_message(embed=discord.Embed(title="🏆 Top offenders", description=text, color=0xF59E0B),
-                                                ephemeral=True, allowed_mentions=discord.AllowedMentions.none())
+        await interaction.followup.send(embed=discord.Embed(title="🏆 Top offenders", description=text, color=0xF59E0B),
+                                        ephemeral=True, allowed_mentions=discord.AllowedMentions.none())
 
     # ── dry-run ──
     @beerus.command(name="test", description="Dry-run: see how Beerus would score a message (nothing is posted/logged)")
@@ -186,16 +191,18 @@ class Admin(commands.Cog):
         except ValueError as exc:
             await interaction.response.send_message(f"❌ {exc}", ephemeral=True)
             return
+        await interaction.response.defer(ephemeral=True)
         cfg.set_override(key, new)
         await self.bot.db.set_setting(f"cfg:{key}", new)
-        await interaction.response.send_message(f"✅ `{key}` = `{new}`", ephemeral=True)
+        await interaction.followup.send(f"✅ `{key}` = `{new}`", ephemeral=True)
 
     @config.command(name="reset", description="Go back to the value in rules.yaml")
     @admin_only()
     async def config_reset(self, interaction: discord.Interaction, key: str) -> None:
+        await interaction.response.defer(ephemeral=True)
         self.bot.cfg.clear_override(key)
         await self.bot.db.delete_setting(f"cfg:{key}")
-        await interaction.response.send_message(f"↩️ `{key}` reset.", ephemeral=True)
+        await interaction.followup.send(f"↩️ `{key}` reset.", ephemeral=True)
 
 
 async def setup(bot) -> None:
